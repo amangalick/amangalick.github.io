@@ -1297,3 +1297,24 @@ video {
     padding-right: 2rem;
   }
 }
+
+
+/* MEAGAN'S CODE */
+.w-1\/3 {
+  width:33%;
+}
+
+.w-2\/3 {
+  width:67%;
+}
+
+.w-1\/8 {
+  width: 12.5%;
+}
+
+.py-4{
+  padding-top: 2rem;
+  padding-bottom: 6rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
