@@ -594,7 +594,7 @@ function createStatsContainerElement(
 
   container.appendChild(stat);
   container.appendChild(desc);
-  let desc3 = "bfskf sof psodf sdoiwpe  foipoid  e w  fs dofispfi spps fisofis fpsoifposfod fodfispdgurn gnkdjf v poisd f uiwnf  s efdfjsfj sf s g dfeufi d";
+  let desc3 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae congue eu consequat ac felis donec et odio. Nunc consequat interdum varius sit amet mattis vulputate enim nulla. Quam elementum pulvinar etiam non quam. Pretium viverra suspendisse potenti nullam ac. Vitae congue eu consequat ac felis. Commodo elit at imperdiet dui accumsan sit amet nulla. Ultricies integer quis auctor elit sed vulputate mi sit. Venenatis a condimentum vitae sapien pellentesque habitant. Eget gravida cum sociis natoque penatibus et magnis. Volutpat consequat mauris nunc congue nisi vitae suscipit. Arcu cursus vitae congue mauris rhoncus aenean. Urna nec tincidunt praesent semper feugiat nibh sed pulvinar proin. Hendrerit dolor magna eget est lorem ipsum. Mattis nunc sed blandit libero volutpat sed cras ornare arcu. Non nisi est sit amet facilisis. In hendrerit gravida rutrum quisque non tellus. Pellentesque eu tincidunt tortor aliquam nulla. Pellentesque eu tincidunt tortor aliquam nulla facilisi cras.";
   container.appendChild(
     popup("test", desc3),
   );
@@ -917,7 +917,7 @@ function createCO2Element(
   desc.innerHTML += description;
   container.appendChild(desc);
   container.appendChild(stat);
-  let desc3 = "bfskf sof psodf sdoiwpe  foipoid  e w  fs dofispfi spps fisofis fpsoifposfod fodfispdgurn gnkdjf v poisd f uiwnf  s efdfjsfj sf s g dfeufi d";
+  let desc3 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae congue eu consequat ac felis donec et odio. Nunc consequat interdum varius sit amet mattis vulputate enim nulla. Quam elementum pulvinar etiam non quam. Pretium viverra suspendisse potenti nullam ac. Vitae congue eu consequat ac felis. Commodo elit at imperdiet dui accumsan sit amet nulla. Ultricies integer quis auctor elit sed vulputate mi sit. Venenatis a condimentum vitae sapien pellentesque habitant. Eget gravida cum sociis natoque penatibus et magnis. Volutpat consequat mauris nunc congue nisi vitae suscipit. Arcu cursus vitae congue mauris rhoncus aenean. Urna nec tincidunt praesent semper feugiat nibh sed pulvinar proin. Hendrerit dolor magna eget est lorem ipsum. Mattis nunc sed blandit libero volutpat sed cras ornare arcu. Non nisi est sit amet facilisis. In hendrerit gravida rutrum quisque non tellus. Pellentesque eu tincidunt tortor aliquam nulla. Pellentesque eu tincidunt tortor aliquam nulla facilisi cras.";
   container.appendChild(
     popup("test", desc3),
   );
