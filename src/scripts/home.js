@@ -7,6 +7,9 @@ var carbonIconSrc = "../images/carbon-capture.png";
 var compostIconSrc = "../images/compostable.png";
 var shareIconSrc = "../images/share.png";
 var qrCodeSrc = "../images/qrcode.png";
+var milesIMAGE = "../images/milesDrivenHolder.png";
+var phoneIMAGE = "../images/phoneHolder.png";
+var trashIMAGE = "../images/trashcanHolder.png";
 
 window.onload = function () {
   document
@@ -54,13 +57,16 @@ function handleFormSubmission() {
     let tonsOfCo2 = kgCo2 / 1000;
 
     let milesDriven = convertToMilesDriven(tonsOfCo2).toFixed(2);
-    let mdDesc = "miles driven";
+    let mdDesc = "You can drive " + milesDriven + " miles <br>or <br>San Jose to San Francisco " + (milesDriven/57.1).toFixed(2) + " times";
 
     let smartPhonesCharged = convertToSmartPhonesCharged(tonsOfCo2).toFixed(2);
     let spDesc = "phones charged";
 
+    let trDesc = "Trash bags of waste recycled instead of landfilled";
+
+    let gasPrice = 3.89;
     let gallonsOfGas = convertToGasConsumed(tonsOfCo2).toFixed(2);
-    let gogDesc = "gallons of gas consumed";
+    let gogDesc = "gallons of gas consumed <br> or <br> $" + (gallonsOfGas*gasPrice).toFixed(2) +" of regular gas at Shell";
 
     let treeSeedlingsGrown = convertToTreeSeedlingsGrown(tonsOfCo2).toFixed(2);
     let tsgDesc = "tree seedlings grown for 10 years";
@@ -78,49 +84,131 @@ function handleFormSubmission() {
       percentile(map[type.value], galsComposted).toFixed(2) +
       "% of composters in Santa Clara.";
 
-    content.appendChild(createInfoContainerElement(description, "4/5", "1/2"));
+    var container = document.createElement("div");
+    container.classList.add(
+      "p-8",
+      "border",
+      "border-gray-300",
+      "rounded-3xl",
+      `w-1/2`,
+      `md:w-1/2`,
+      "mx-auto",
+      "mt-2",
+      "shadow-md",
+    );
+
+    var transition = document.createElement("p");
+    transition.classList.add(
+      "font-heading",
+      "mb-6",
+      "mt-6",
+      "text-3xl",
+      "md:text-4xl",
+      "font-bold",
+      "tracking-tight",
+      "max-w-full",
+      "text-center"
+    )
+
+    transition.innerHTML += "What does " + kgCo2 + " kilograms of CO2 savings look like?"
 
     content.appendChild(
-      createStatsContainerElement(
+      createCO2StatsticContainer(
         kgCo2,
-        kgDesc,
-        carbonIconSrc,
-        "25px",
+        percentile(map[type.value], galsComposted).toFixed(2),
         "4/5",
         "1/2",
       ),
     );
-    // desktop computer
-    if (window.screen.width >= 768) {
+
+    content.appendChild(transition);
+    
+    var milesContainer = createStatsContainerElement(
+      milesDriven,
+      mdDesc,
+      carIconSrc,
+      "25px",
+      "4/5",
+      "1/2",
+    );
+
+    milesContainer.children[1].classList.remove("text-base"); //children[1] is desc object
+    milesContainer.children[1].classList.add("text-lg");
+
+    var icon = document.createElement("img");
+    icon.classList.add(
+      "w-full",
+      "mb-3"
+    );
+    icon.src = milesIMAGE;
+    icon.alt = "icon";
+
+    const childToDelete = milesContainer.firstChild;
+
+    // Check if the child element exists before attempting to remove it
+    if (childToDelete) {
+        // Remove the child element
+        milesContainer.removeChild(childToDelete);
+    }
+
+    const firstExistingChild = milesContainer.firstChild;
+
+    milesContainer.insertBefore(icon, firstExistingChild);
+    
+    content.appendChild(
+        milesContainer,
+      );
+
       content.appendChild(
-        createTwoStatsRowContainer(
-          milesDriven,
+        createThreeStatsRowContainer(
+          gallonsOfGas,
           smartPhonesCharged,
-          mdDesc,
+          smartPhonesCharged,
+          gogDesc,
+          trDesc,
           spDesc,
           carIconSrc,
           phoneIconSrc,
+          phoneIMAGE,
           "30px",
+          "18px",
           "18px",
           "4/5",
           "1/2",
         ),
       );
 
-      content.appendChild(
-        createTwoStatsRowContainer(
-          gallonsOfGas,
-          treeSeedlingsGrown,
-          gogDesc,
-          tsgDesc,
-          gasIconSrc,
-          treeIconSrc,
-          "18px",
-          "17px",
-          "4/5",
-          "1/2",
-        ),
-      );
+    // desktop computer
+    if (window.screen.width >= 768) {
+      // content.appendChild(
+      //   createTwoStatsRowContainer(
+      //     milesDriven,
+      //     smartPhonesCharged,
+      //     mdDesc,
+      //     spDesc,
+      //     carIconSrc,
+      //     phoneIconSrc,
+      //     "30px",
+      //     "18px",
+      //     "4/5",
+      //     "1/2",
+      //   ),
+      // );
+
+      // content.appendChild(
+      //   createTwoStatsRowContainer(
+      //     gallonsOfGas,
+      //     treeSeedlingsGrown,
+      //     gogDesc,
+      //     tsgDesc,
+      //     gasIconSrc,
+      //     treeIconSrc,
+      //     "18px",
+      //     "17px",
+      //     "4/5",
+      //     "1/2",
+      //   ),
+      // );
     } // mobile
     else {
       content.appendChild(
@@ -165,36 +253,30 @@ function handleFormSubmission() {
       );
     }
   }
-}
+  const openModalButtons = document.querySelectorAll('[data-modal-target]');
+  const closeModalButtons = document.querySelectorAll('[data-close-button]');
+  const overlay = document.getElementById('overlay');
 
-function toggleAR() {
-  // If device is mobile, open AR website in new tab (https://ytxxc.zappar.io/7543435830527519324/)
-  // Else, open AR QR code website in popup modal
+  openModalButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const modal = document.querySelector(button.dataset.modalTarget)
+      openModal(modal)
+    })
+  });
 
-  // Regex function provided by http://detectmobilebrowsers.com/
-  let check = false;
-  (function (a) {
-    if (
-      /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(
-        a,
-      ) ||
-      /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(
-        a.substr(0, 4),
-      )
-    )
-      check = true;
-  })(navigator.userAgent || navigator.vendor || window.opera);
+  overlay.addEventListener('click', () => {
+    const modals = document.querySelectorAll('.modal.active')
+    modals.forEach(modal => {
+      closeModal(modal)
+    })
+  });
 
-  if (check) {
-    window.open("https://ytxxc.zappar.io/7543435830527519324/", "_blank");
-  } else {
-    document.getElementById("overlay-modal").classList.toggle("invisible");
-    document.getElementById("popup-modal").classList.toggle("invisible");
-    document.getElementById("overlay-modal").classList.toggle("opacity-0");
-    document.getElementById("overlay-modal").classList.toggle("opacity-100");
-    document.getElementById("popup-modal").classList.toggle("opacity-0");
-    document.getElementById("popup-modal").classList.toggle("opacity-100");
-  }
+  closeModalButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const modal = button.closest('.modal')
+      closeModal(modal)
+    })
+  });
 }
 
 function formValidation() {
@@ -424,32 +506,32 @@ function createCharts(
   stats.after(bigStatsContainer);
 }
 
-function createInfoContainerElement(
-  description,
-  mobileWidth = "4/5",
-  desktopWidth = "3/12",
-) {
-  var display = document.createElement("div");
-  display.innerHTML = description;
-  display.classList.add(
-    "bg-green-100",
-    "border-l-4",
-    "border-green-500",
-    "text-green-700",
-    "rounded",
-    "p-4",
-    "mt-4",
-    `md:w-${desktopWidth}`,
-    `w-${mobileWidth}`,
-    "mx-auto",
-  );
+// function createInfoContainerElement(
+//   description,
+//   mobileWidth = "4/5",
+//   desktopWidth = "3/12",
+// ) {
+//   var display = document.createElement("div");
+//   display.innerHTML = description;
+//   display.classList.add(
+//     "bg-green-100",
+//     "border-l-4",
+//     "border-green-500",
+//     "text-green-700",
+//     "rounded",
+//     "p-4",
+//     "mt-4",
+//     `md:w-${desktopWidth}`,
+//     `w-${mobileWidth}`,
+//     "mx-auto",
+//   );
 
-  var info = document.createElement("p");
-  info.classList.add("font-bold", "text-center");
-  display.appendChild(info);
+//   var info = document.createElement("p");
+//   info.classList.add("font-bold", "text-center");
+//   display.appendChild(info);
 
-  return display;
-}
+//   return display;
+// }
 
 function createStatsContainerElement(
   statistic,
@@ -487,29 +569,35 @@ function createStatsContainerElement(
     "font-black",
     "tracking-tight",
     "max-w-full",
+    "text-center"
   );
   stat.innerHTML = statistic;
 
-  var desc = document.createElement("span");
+  var desc = document.createElement("p");
   desc.classList.add(
     "font-heading",
     "mb-2",
     "text-base",
     "text-gray-700",
     "font-bold",
+    "text-center"
   );
 
-  var icon = document.createElement("img");
-  icon.classList.add("inline");
-  icon.src = iconSrc;
-  icon.style.height = iconSize;
-  icon.alt = "icon";
+  // var icon = document.createElement("img");
+  // icon.classList.add("inline");
+  // icon.src = iconSrc;
+  // icon.style.height = iconSize;
+  // icon.alt = "icon";
 
-  desc.appendChild(icon);
-  desc.innerHTML += " " + description;
+  // desc.appendChild(icon);
+  desc.innerHTML += description;
 
   container.appendChild(stat);
   container.appendChild(desc);
+  let desc3 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae congue eu consequat ac felis donec et odio. Nunc consequat interdum varius sit amet mattis vulputate enim nulla. Quam elementum pulvinar etiam non quam. Pretium viverra suspendisse potenti nullam ac. Vitae congue eu consequat ac felis. Commodo elit at imperdiet dui accumsan sit amet nulla. Ultricies integer quis auctor elit sed vulputate mi sit. Venenatis a condimentum vitae sapien pellentesque habitant. Eget gravida cum sociis natoque penatibus et magnis. Volutpat consequat mauris nunc congue nisi vitae suscipit. Arcu cursus vitae congue mauris rhoncus aenean. Urna nec tincidunt praesent semper feugiat nibh sed pulvinar proin. Hendrerit dolor magna eget est lorem ipsum. Mattis nunc sed blandit libero volutpat sed cras ornare arcu. Non nisi est sit amet facilisis. In hendrerit gravida rutrum quisque non tellus. Pellentesque eu tincidunt tortor aliquam nulla. Pellentesque eu tincidunt tortor aliquam nulla facilisi cras.";
+  container.appendChild(
+    popup("test", desc3),
+  );
 
   return container;
 }
@@ -744,4 +832,317 @@ function loadSheets() {
         );
       },
     );
+}
+
+function createCO2StatsticContainer(
+  stat1, //co2
+  stat2, //percentile
+  mobileWidth = "4/5",
+  desktopWidth = "3/12",
+) {
+  var container = document.createElement("div");
+  container.classList.add(
+    "flex",
+    `w-${mobileWidth}`,
+    `md:w-${desktopWidth}`,
+    "mx-auto",
+  );
+
+  let desc1 = "Your CO2 savings:";
+  let desc2 = "You are in the " + stat2 +" percentile. According to our data, the average composter in Santa Clara County is "
+  + "blah blah blah. This is a combination of blah blah blah pounds in yard waste, blah blha blah pounds in food waste."
+  var statCont1 = createCO2Element(stat1, desc1);
+  statCont1.classList.remove("md:w-3/12","w-4/5"); 
+  statCont1.classList.add("mr-1","md:w-1/8", "w-1/3");
+  var statCont2 = createStatisticsDescription(stat2, desc2);
+  statCont2.classList.remove("md:w-3/12","w-4/5");
+  statCont2.classList.add("ml-1","md:w-1/8","max-w-full", "w-2/3");
+
+  container.appendChild(statCont1);
+  container.appendChild(statCont2);
+
+  return container;
+}
+
+function createCO2Element(
+  statistic,
+  description,
+  // iconSrc,
+  // iconSize = "30px",
+  width = "4/5",
+  desktopWidth = "3/12",
+) {
+  // Rewrite statistic with a K if over 1000
+  if (statistic > 1000) {
+    statistic = (statistic / 1000).toFixed(2) + "K";
+  }
+
+  var container = document.createElement("div");
+  container.classList.add(
+    "p-8",
+    "border",
+    "border-gray-300",
+    "rounded-3xl",
+    `w-${width}`,
+    `md:w-${desktopWidth}`,
+    "mx-auto",
+    "mt-2",
+    "shadow-md",
+  );
+
+  var stat = document.createElement("p"); //stat
+  stat.classList.add(
+    "font-heading",
+    "mb-6",
+    "text-3xl",
+    "md:text-4xl",
+    "text-anr-off-blue",
+    "font-black",
+    "tracking-tight",
+    "max-w-full",
+    "text-center"
+  );
+  stat.innerHTML = statistic + " kg";
+
+  var desc = document.createElement("p"); //your co2 saving
+  desc.classList.add(
+    "font-heading",
+    "mb-2",
+    "text-lg",
+    "text-gray-700",
+    "font-bold",
+    "text-center"
+  );
+
+  desc.innerHTML += description;
+  container.appendChild(desc);
+  container.appendChild(stat);
+  let desc3 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae congue eu consequat ac felis donec et odio. Nunc consequat interdum varius sit amet mattis vulputate enim nulla. Quam elementum pulvinar etiam non quam. Pretium viverra suspendisse potenti nullam ac. Vitae congue eu consequat ac felis. Commodo elit at imperdiet dui accumsan sit amet nulla. Ultricies integer quis auctor elit sed vulputate mi sit. Venenatis a condimentum vitae sapien pellentesque habitant. Eget gravida cum sociis natoque penatibus et magnis. Volutpat consequat mauris nunc congue nisi vitae suscipit. Arcu cursus vitae congue mauris rhoncus aenean. Urna nec tincidunt praesent semper feugiat nibh sed pulvinar proin. Hendrerit dolor magna eget est lorem ipsum. Mattis nunc sed blandit libero volutpat sed cras ornare arcu. Non nisi est sit amet facilisis. In hendrerit gravida rutrum quisque non tellus. Pellentesque eu tincidunt tortor aliquam nulla. Pellentesque eu tincidunt tortor aliquam nulla facilisi cras.";
+  container.appendChild(
+    popup("test", desc3),
+  );
+  
+  return container;
+}
+
+function createStatisticsDescription(
+  statistic, //percentile stat
+  description,
+  // iconSrc,
+  // iconSize = "30px",
+  width = "4/5",
+  desktopWidth = "3/12",
+){
+  var container = document.createElement("div");
+  container.classList.add(
+    "p-8",
+    "border",
+    "border-gray-300",
+    "rounded-3xl",
+    `w-${width}`,
+    `md:w-${desktopWidth}`,
+    "mx-auto",
+    "mt-2",
+    "shadow-md",
+  );
+
+  var header = document.createElement("h3");
+  header.classList.add(
+    "font-heading",
+    "mb-2",
+    "text-3xl",
+    "md:text-4xl",
+    "font-bold",
+    "text-anr-off-blue",
+    "font-black",
+    "text-center"
+  );
+  header.innerHTML += "Statistics";
+
+  var desc = document.createElement("p");
+  desc.classList.add(
+    "font-heading",
+    "mb-2",
+    "text-lg",
+    "text-gray-700",
+    "font-bold",
+    "text-center"
+  );
+
+  desc.innerHTML += description;
+  
+  container.appendChild(header);
+  container.appendChild(desc);
+  let desc3 = "bfskf sof psodf sdoiwpe  foipoid  e w  fs dofispfi spps fisofis fpsoifposfod fodfispdgurn gnkdjf v poisd f uiwnf  s efdfjsfj sf s g dfeufi d";
+  var popUp = popup("text", desc3);
+  container.appendChild(popUp);
+
+  return container;
+}
+
+function createThreeStatsRowContainer(
+  stat1,
+  stat2,
+  stat3,
+  desc1,
+  desc2,
+  desc3,
+  icon1,
+  icon2,
+  icon3,
+  icon1Sz = "30px",
+  icon2Sz = "30px",
+  icon3Sz = "30px",
+  mobileWidth = "4/5",
+  desktopWidth = "3/12",
+) {
+    var container = document.createElement("div");
+    container.classList.add(
+      "flex",
+      `w-${mobileWidth}`,
+      `md:w-${desktopWidth}`,
+      "mx-auto",
+    );
+
+    var statCont1 = createVerticleContainer(stat1, stat2, desc1, desc2, icon1, icon2, icon1Sz, icon2Sz);
+    statCont1.classList.remove("md:w-3/12");
+    statCont1.classList.add("mr-1", "md:w-1/2");
+    var statCont2 = createStatsContainerElement(stat3, desc3, icon3, icon3Sz);
+    statCont2.classList.remove("md:w-3/12");
+    statCont2.classList.add("ml-1", "md:w-1/2");
+    statCont2.children[1].classList.remove("text-base");
+    statCont2.children[1].classList.add("text-xl");
+
+    var icon = document.createElement("img");
+    icon.classList.add(
+      "w-full",
+      "mb-3"
+    );
+    icon.src = icon3;
+    icon.alt = "icon";
+
+    statCont2.insertBefore(icon, statCont2.firstChild);
+
+    container.appendChild(statCont1);
+    container.appendChild(statCont2)
+
+    return container;
+}
+
+function createVerticleContainer(
+  stat1,
+  stat2,
+  desc1,
+  desc2,
+  icon1,
+  icon2,
+  icon1Sz = "30px",
+  icon2Sz = "30px",
+  mobileWidth = "4/5",
+  desktopWidth = "3/12",
+) {
+    var container = document.createElement("div");
+    container.classList.add(
+      `w-${mobileWidth}`,
+      `md:w-${desktopWidth}`,
+      "mx-auto",
+      "flex",
+      "flex-col"
+    );
+
+    var statCont1 = createStatsContainerElement(stat1, desc1, icon1, icon1Sz);
+    statCont1.classList.remove("md:w-3/12", "mx-auto");
+    statCont1.classList.add("w-full","h-equal");
+    var statCont2 = createStatsContainerElement(stat2, desc2, icon2, icon2Sz);
+    statCont2.classList.remove("md:w-3/12","mx-auto");
+    statCont2.classList.add("w-full", "h-equal");
+    
+    var icon = document.createElement("img");
+    icon.classList.add(
+      "w-3/4",
+      "mb-3",
+      "mx-auto"
+    );
+    icon.src = trashIMAGE;
+    icon.alt = "icon";
+
+    statCont2.insertBefore(icon, statCont2.firstChild);
+
+    container.appendChild(statCont1);
+    container.appendChild(statCont2);
+
+    return container;
+}
+
+function popup(
+  title,
+  desc
+){
+  var container = document.createElement("div"); //contains modal and overlay
+  container.classList.add("text-center");
+
+  var moreInfo = document.createElement("button");
+  moreInfo.setAttribute("data-modal-target", "#modal");
+  moreInfo.classList.add('text-base', 'font-bold');
+  moreInfo.innerHTML = "Learn More";
+  container.append(moreInfo);
+
+  var modal = document.createElement("div");
+  modal.setAttribute("id", "modal");
+  modal.classList.add(
+    "modal",
+  );
+
+  var modalHeader = document.createElement("div");
+  modalHeader.classList.add("modal-header");
+
+  var modalTitle = document.createElement("p");
+  modalTitle.classList.add(
+    'text-xl',
+    'font-black'
+  )
+  modalTitle.innerHTML = title;
+
+  var closeButton = document.createElement("button");
+  closeButton.setAttribute("data-close-button", "close-button");
+  closeButton.classList.add(
+    'text-xl',
+    'font-black'
+  )
+  closeButton.innerHTML = "&times;"
+
+  var modalBody = document.createElement("div");
+  modalBody.classList.add(
+    'p-4'
+    )
+  modalBody.innerHTML = desc;
+
+  var overlay = document.createElement("div");
+  overlay.setAttribute("id", "overlay");
+  
+  // overlay.classList.add(
+  //   'overlay',
+  // )
+
+  modalHeader.appendChild(modalTitle);
+  modalHeader.appendChild(closeButton);
+  modal.appendChild(modalHeader);
+  modal.appendChild(modalBody);
+  container.appendChild(moreInfo);
+  container.appendChild(modal);
+  container.appendChild(overlay);
+  
+  return container;
+}
+
+function openModal(modal) {
+  if (modal == null) return;
+  modal.classList.add('active');
+  overlay.classList.add('active');
+}
+
+function closeModal(modal) {
+  if (modal == null) return;
+  modal.classList.remove('active');
+  overlay.classList.remove('active');
 }
