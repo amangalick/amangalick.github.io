@@ -10,6 +10,7 @@ var qrCodeSrc = "../images/qrcode.png";
 var milesIMAGE = "../images/milesDrivenHolder.png";
 var phoneIMAGE = "../images/phoneHolder.png";
 var trashIMAGE = "../images/trashcanHolder.png";
+var movingCar = "../images/movingcar.png";
 
 window.onload = function () {
   document
@@ -135,13 +136,20 @@ function handleFormSubmission() {
     milesContainer.children[1].classList.remove("text-base"); //children[1] is desc object
     milesContainer.children[1].classList.add("text-lg");
 
+    var movingCarContainer = document.createElement("div");
+    movingCarContainer.classList.add(
+      "mx-3",
+      // "bg-red-100"
+    );
+
     var icon = document.createElement("img");
     icon.classList.add(
-      "w-full",
-      "mb-3"
+      "movingCar",
     );
-    icon.src = milesIMAGE;
+    icon.src = movingCar;
     icon.alt = "icon";
+
+    movingCarContainer.appendChild(icon);
 
     const childToDelete = milesContainer.firstChild;
 
@@ -153,7 +161,7 @@ function handleFormSubmission() {
 
     const firstExistingChild = milesContainer.firstChild;
 
-    milesContainer.insertBefore(icon, firstExistingChild);
+    milesContainer.insertBefore(movingCarContainer, firstExistingChild);
     
     content.appendChild(
         milesContainer,

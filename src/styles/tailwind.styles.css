@@ -1336,6 +1336,11 @@ video {
   flex:1;
 }
 
+.mx-3{
+  margin-left: 4rem;
+  margin-right: 4rem;
+}
+
 .modal{
   position: fixed;
   top: 50%;
@@ -1379,3 +1384,32 @@ video {
   pointer-events: all;
 }
 
+.movingCar {
+  position: relative;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-name: run;
+  -webkit-animation-duration: 7s;
+  width:100px;
+  height:100px;
+  overflow: hidden;
+}
+
+@-webkit-keyframes run {
+  0% {
+    left: 0;
+  }
+  48% {
+    -webkit-transform: rotateY(0deg); 
+  }
+  50% { 
+    left: calc(100% - 100px);
+    -webkit-transform: rotateY(180deg); 
+  }
+  98% {
+    -webkit-transform: rotateY(180deg); 
+  }
+  100% {
+    left: 0;    
+     -webkit-transform: rotateY(0deg);
+  }
+}
