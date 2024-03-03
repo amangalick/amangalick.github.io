@@ -16,38 +16,63 @@
     header {
       text-align: center;
       padding: 20px;
-      background-color: #eeeeee;
+      background-color: #363b63;
       color: #000000;
+    }
+
+    article {
+      border-bottom: 1px solid #000;
     }
 
     h1 {
       margin: 10px 0;
       font-size: 40px; /* Increased font size */
       padding: 20px;   /* Increased padding */
-      background-color: #eeeeee; /* Darker background color */
-      color: #000000;
+      background-color: ##363b63; /* Darker background color */
+      color: #dfdfdf;
       border-radius: 10px; /* Rounded corners */
     }
 
     h2 {
-      border-bottom: 2px solid #464649;
       padding-bottom: 5px;
       padding-left: 10px;
       font-size: 24px; /* Increased font size */
       margin-top: 20px; /* Increased top margin */
+      text-align: center;
+    }
+
+    h3 { 
+      color: #e3e3e3;
     }
 
     h5 {
-      color: #000000;
+      color: #e3e3e3;
+    }
+
+    li {
+      font-size: 22px; /* You can customize the font size */
+      padding: 5px;
     }
 
     section {
-      background-color: #eeeeee;
+      background-color: #ebe7e7;
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       margin: 20px auto; /* Center the section horizontally */
       max-width: 1250px; /* Set a maximum width for the section */
+    }
+
+
+    .intro{
+      color: #000000;
+      padding: 30px;
+      border-radius: 10px;
+      background-color: #ebe7e7; /* Darker background color */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin: 30px auto; /* Center the section horizontally */
+      max-width: 800px; /* Set a maximum width for the section */
+      display: flex;
     }
 
     .info-text {
@@ -57,7 +82,9 @@
       background-color: #ebe7e7; /* Darker background color */
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       margin: 20px auto; /* Center the section horizontally */
-      max-width: 850px; /* Set a maximum width for the section */
+      max-width: 500px; /* Set a maximum width for the section */
+      text-align: center;
+      
     }
 
     .infographic{
@@ -74,6 +101,11 @@
       display: flex;
     }
 
+    .line { 
+      border-left: 1px solid#000;
+    }
+
+
     p {
       text-align: center;
       line-height: 1.5;
@@ -84,70 +116,153 @@
       text-align: center;
     }
 
+    .actual-img {
+      max-width: 10px;
+      height: auto;
+      margin: 0;
+      border-radius: 10px;
+      
+    }
+
     .image-container img {
-      max-width: 25%;
+      max-width: 30%;
+      height: auto;
+      display: inline-block;
+      margin: 0;
+      border-radius: 10px; /* Rounded corners for images */
+    }
+
+    .image-container2 img {
+      max-width: 50%;
       height: auto;
       display: inline-block;
       margin: 0;
       border-radius: 10px; /* Rounded corners for images */
     }
   </style>
+
 </head>
+
 <body>
 
-  <header>
-    <h1>How to Track Accurately</h1>
-    <h3>This page is here to help you learn how to properly compost!</h3>
-  </header>
+ 
 
-  <section>
-    <article>
-      <h2>Let's Get Started</h2>
-      <div class="info-text">
-      <p>The average Santa Clara Resident produces 4.4 lbs of waste a day or 30 lbs a week! This is roughly the size of a corgi!
-        Of maybe do that's the weight of 4 gallons of water
+  <!-- This section explains why you should compost in general  -->
+
+  <section> 
+
+
+    <article> 
+    <header>
+      <h1>How to Track Accurately</h1>
+      <h3>This page is here to help you learn how to properly compost!</h3>
+    </header>
+
+    <div class="bothinfos"> 
+
+    <div class="line"> </div>
+
+    <div class="infographic"> 
+      <h2> The Benefits of Composting at Home</h2>
+    <p>
+     
+      <li>Waste reduction by diverting organic material from landfills </li>
+      <li> Enriching the soil with essential nutrients</li>
+      <li> Carbon sequestration: compost stores carbon from organic materials and contributes to 
+        reduction of carbon dioxide in the atmosphere </li>
+      <li> The reduction of methane emissions; when organic materials are thrown into landfills, 
+        they produce methane, a potent greenhouse gas</li>
+      
       </p>
-      </div>
-      <!-- Add an image here -->
-      <div class="image-container">
-        <img src="corgi.png" alt="corgi-dog">
-        <img src="corgi2.png" alt="corgi-dog2">
-      </div>
-    </article>
+
+    </div>
+
+    <div class="line"> </div>
+  
+    <div class="infographic"> 
+      <h2> How Much Should You Compost A Week?</h2>
+      <p> The average Santa Clara resident produces 4.4 lbs of waste a week. </p>
+        
+        <div class="image-container"> 
+          <img src="corgi.png" alt="corgi-dog">
+        </div>
+    </div>
+  
+    <div class="line"> </div>
+  </div>
+
+</article>
+
+
+
+
+<!-- This section explains how the individual relates -->
+
+    
 
     <article>
       <div class="bothinfos">
+        <div class="line"> </div>
+
       <div class="infographic"> 
-      <h2>Confused on how to pick the correct compost bin?</h2>
-      <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-        Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
-        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      <h2>Do Compost</h2>
+      <ul>
+        <li>Fruit and vegetable scraps</li>
+        <li>Egg, peanut and nut shells</li>
+        <li>Stalks, stems and vines</li>
+        <li>Coffee grounds and filters, tea bags</li>
+        <li>Garden clippings</li>
+        <li>Grass clippings and leaves</li>
+        <li>Apple cores and citrus rinds</li>
+        <li>Bark, wood ashes</li>
+        <li>Manure (horse, cow, chicken & rabbit)</li>
+      </ul>
       </div>
 
+      <div class="line"> </div>
 
         <div class="infographic"> 
-        <h2>Follow this Chart and find the correct bin for you!</h2>
-      <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-        Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
-        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <h2> How to use the Calculator </h2>
+        <ul>
+          <li>Enter amount of waste composted for the week</li>
+          <li> Read the pop-ups they will help you understand how well you are composting</li>
+        </ul>
       </div>
 
+      <div class="line"> </div>
     </div>
     </article>
 
+    <!-- This is the bottom section -->
+
     <article>
-      <h2>The impact of composting:</h2>
+      <div class="bothinfos"> 
+        <div class="line"> </div>
+
     <div class="info-text">
+      <h2> Why Food Waste Going to the Landfill is Dangerous</h2>
       <p>When compostable waste goes to a landfill, it gets buried under massive 
         amounts of other trash, cutting off a regular supply of oxygen for 
         the decomposers thus slowing down all the compost in the landfill</p>
       </div>
-    </article>
-  </section>
+
+      <div class="line"> </div>
+
+
+      <div class="info-text">
+        <h2> Helpful Links to Learn More about Composting </h2>
+          <ul> </ul><a href="https://cesantaclara.ucanr.edu/Home_Composting_Education/Composting_Workshops/" target="_blank"> Composting Workshops</a> </ul>
+         <ul> </ul><a href="https://cesantaclara.ucanr.edu/Home_Composting_Education/Where_to_Get_Compost/" target="_blank"> Where to get Compost</a> </ul>
+         <ul> <a href="https://cesantaclara.ucanr.edu/Home_Composting_Education/Municipal_Composting_Information/" target=" _blank">Roadside Compost Options </a> </ul>
+        
+        </div>
+      
+        <div class="line"> </div>
+    </div>
+
+  </article>
+ 
+</section>
 
 </body>
 </html>
