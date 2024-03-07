@@ -1369,6 +1369,7 @@ video {
 
 #overlay {
   position: fixed;
+  z-index: 9;
   opacity: 0;
   transition: 200ms ease-in-out;
   top: 0;
@@ -1394,6 +1395,12 @@ video {
   overflow: hidden;
 }
 
+.movingCarMobile {
+  width:50px;
+  height:50px;
+  margin-left: 1.5rem;
+}
+
 @-webkit-keyframes run {
   0% {
     left: 0;
@@ -1412,4 +1419,10 @@ video {
     left: 0;    
      -webkit-transform: rotateY(0deg);
   }
+}
+
+.mySlides{
+  width: 50%;
+  margin-top: 20%;
+  margin-bottom: 20%;
 }

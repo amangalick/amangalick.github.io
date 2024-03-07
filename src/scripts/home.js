@@ -1,16 +1,9 @@
 // Icon links
-var carIconSrc = "../images/car.png";
-var phoneIconSrc = "../images/charging.png";
-var gasIconSrc = "../images/gas-station.png";
-var treeIconSrc = "../images/plant.png";
-var carbonIconSrc = "../images/carbon-capture.png";
-var compostIconSrc = "../images/compostable.png";
-var shareIconSrc = "../images/share.png";
-var qrCodeSrc = "../images/qrcode.png";
-var milesIMAGE = "../images/milesDrivenHolder.png";
-var phoneIMAGE = "../images/phoneHolder.png";
 var trashIMAGE = "../images/trashcanHolder.png";
 var movingCar = "../images/movingcar.png";
+var battery = ["../images/EmptyBattery.png", "../images/1:4Charged.png", "../images/1:2Charged.png","../images/3:4Charged.png","../images/FullCharge.png"];
+
+
 
 window.onload = function () {
   document
@@ -52,52 +45,61 @@ function handleFormSubmission() {
     var unit = document.getElementById("measurement");
     var type = document.getElementById("compost-type");
 
-    let kgCo2 = convertToKgCO2(input.value, unit.value).toFixed(2);
-    let kgDesc = "kg of CO² saved";
-
-    let tonsOfCo2 = kgCo2 / 1000;
-
-    let milesDriven = convertToMilesDriven(tonsOfCo2).toFixed(2);
-    let mdDesc = "You can drive " + milesDriven + " miles <br>or <br>San Jose to San Francisco " + (milesDriven/57.1).toFixed(2) + " times";
-
-    let smartPhonesCharged = convertToSmartPhonesCharged(tonsOfCo2).toFixed(2);
-    let spDesc = "phones charged";
-
-    let trDesc = "Trash bags of waste recycled instead of landfilled";
-
-    let gasPrice = 3.89;
-    let gallonsOfGas = convertToGasConsumed(tonsOfCo2).toFixed(2);
-    let gogDesc = "gallons of gas consumed <br> or <br> $" + (gallonsOfGas*gasPrice).toFixed(2) +" of regular gas at Shell";
-
-    let treeSeedlingsGrown = convertToTreeSeedlingsGrown(tonsOfCo2).toFixed(2);
-    let tsgDesc = "tree seedlings grown for 10 years";
-
-    // Get the percentile of the user's composting
-    let lbsComposted = kgCo2 / 0.1814;
-    let galsComposted = lbsComposted / 6.18891540495;
-    let map = {
-      food: JSON.parse(localStorage.getItem("allFoodWasteComposted")),
-      yard: JSON.parse(localStorage.getItem("allYardWasteComposted")),
-      all: JSON.parse(localStorage.getItem("allWasteComposted")),
+    let Co2 = {
+      val: convertToKgCO2(input.value, unit.value).toFixed(2),
+      desc: "Your CO2 savings:",
+      popUpDesc: "This is the description for the pop up for the CO2",
+      modalID: "CO2Modal",
+      title: "Carbon Dixode Savings",
     };
-    let description =
-      "According to our data, you were in the top " +
-      percentile(map[type.value], galsComposted).toFixed(2) +
-      "% of composters in Santa Clara.";
 
-    var container = document.createElement("div");
-    container.classList.add(
-      "p-8",
-      "border",
-      "border-gray-300",
-      "rounded-3xl",
-      `w-1/2`,
-      `md:w-1/2`,
-      "mx-auto",
-      "mt-2",
-      "shadow-md",
+    let tonsOfCo2 = Co2.val / 1000;
+
+    let milesDriven = {
+      val: convertToMilesDriven(tonsOfCo2).toFixed(2),
+      desc: "You can drive " + convertToMilesDriven(tonsOfCo2).toFixed(2) + " miles <br>or <br>San Jose to San Francisco " + (convertToMilesDriven(tonsOfCo2).toFixed(2)/57.1).toFixed(2) + " times",
+      popUpDesc: "Passenger vehicles include cars, vans, pickups, and SUVs with 2 axles and 4 tires. In 2021, their fuel economy averaged 22.9 mpg, and CO2 accounted for 99.3% of their greenhouse gases (EPA 2023; FHWA 2023). CO2 emissions from gasoline are 8.89 kg per 1,000 gallons. To calculate emissions per mile: divide CO2 per gallon by fuel economy for CO2 per mile, adjusting for methane and nitrous oxide to reflect total greenhouse emissions.",
+      modalID: "mdModal",
+      title: "Miles Driven",
+    };
+
+    let smartPhonesCharged = {
+      val: convertToSmartPhonesCharged(tonsOfCo2).toFixed(2),
+      desc: "phones charged",
+      popUpDesc: "The U.S. DOE states that a typical smartphone battery uses 22.596 Watt-hours over 24 hours, covering both charging from empty to full and maintaining the charge for a day. It takes about 2 hours to fully charge a smartphone battery (Ferreira et al. 2011). When a fully charged phone remains plugged in, it consumes 0.0415 Watts, known as 'maintenance mode' power (Dommu 2023). The energy for charging is calculated by subtracting the 'maintenance mode' energy (0.0415 Watts multiplied by 22 hours) from the total 24-hour consumption. <br> CO2 emissions for charging a smartphone are calculated by applying the energy used per charge to the 2021 national average CO2 emission rate of 1,540.1 lbs CO2 per megawatt-hour, which includes transmission and distribution losses (EPA 2023).",
+      modalID: "spModal",
+      title: "Smart Phones Charged",
+    };
+    
+
+    let trashBagSaved = {
+      val: convertToTrashBags(tonsOfCo2).toFixed(3),
+      desc: "Trash bags of waste recycled instead of landfilled",
+      popUpDesc: "WARM indicates that recycling mixed materials (like paper, metals, plastics) instead of landfilling them reduces emissions by 2.88 metric tons CO2 equivalent per short ton. The CO2 emissions savings for each trash bag of waste were calculated by applying the per ton savings to the waste quantity in an average trash bag. This quantity was derived by multiplying the mixed recyclables' average density (111 lbs per cubic yard, EPA 2016a) by the volume of a standard 25-gallon trash bag, typically between 20 to 30 gallons (EPA 2016b).",
+      modalID: "trModal",
+      title: "Trash bags Recycled Instead of Landfilled",
+    };
+
+    let gallonsOfGas = {
+      val: convertToGasConsumed(tonsOfCo2).toFixed(2),
+      desc: "gallons of gas consumed",
+      popUpDesc: "In the introduction to the joint rulemaking by the EPA and the Department of Transportation on May 7, 2010, which set the initial fuel economy standards for model years 2012-2016, the agencies agreed to use a standard conversion factor of 8,887 grams of CO2 emissions for every gallon of gasoline used (Federal Register 2010). For context, this number of grams of CO2 per gallon of gasoline burned is calculated by multiplying the fuel's heat content per gallon by the CO2 emissions per unit of fuel heat content.<br> This calculation is based on the assumption that all carbon in the gasoline is fully converted into CO2 (IPCC 2006).",
+      modalID: "gogModal",
+      title: "Gallons of Gas Consumed",
+    };
+
+    let statistics = {
+      desc: "The UCCE Composting Education Program (CEP) hosts a collection of composting workshops all throughout the year, where Santa Clara County residents come to learn the benefits of composting and how they can incorporate composting into their daily lives. Three months after these workshops, CEP sends out a survey to evaluate how workshop attendees are composting at home. With the survey they collect data such as weekly food composting, weekly yard waste composting, and challenges home composters may face. With this survey data, we are able to provide these statistics.",
+      modalID: "statModal",
+      title: "UCCE Composting Education Statistics",
+    };
+
+    var hyperlinkURL = "https://cesantaclara.ucanr.edu/Home_Composting_Education/Composting_Workshops/";
+    statistics.desc = statistics.desc.replace(
+      'composting workshops',
+      '<a href="' + hyperlinkURL + '" target="_blank" style="text-decoration: underline">composting workshops</a>'
     );
-
+    
     var transition = document.createElement("p");
     transition.classList.add(
       "font-heading",
@@ -109,158 +111,109 @@ function handleFormSubmission() {
       "tracking-tight",
       "max-w-full",
       "text-center"
-    )
-
-    transition.innerHTML += "What does " + kgCo2 + " kilograms of CO2 savings look like?"
-
-    content.appendChild(
-      createCO2StatsticContainer(
-        kgCo2,
-        percentile(map[type.value], galsComposted).toFixed(2),
-        "4/5",
-        "1/2",
-      ),
     );
 
-    content.appendChild(transition);
-    
-    var milesContainer = createStatsContainerElement(
-      milesDriven,
-      mdDesc,
-      carIconSrc,
-      "25px",
-      "4/5",
-      "1/2",
-    );
-
-    milesContainer.children[1].classList.remove("text-base"); //children[1] is desc object
-    milesContainer.children[1].classList.add("text-lg");
-
-    var movingCarContainer = document.createElement("div");
-    movingCarContainer.classList.add(
-      "mx-3",
-      // "bg-red-100"
-    );
-
-    var icon = document.createElement("img");
-    icon.classList.add(
-      "movingCar",
-    );
-    icon.src = movingCar;
-    icon.alt = "icon";
-
-    movingCarContainer.appendChild(icon);
-
-    const childToDelete = milesContainer.firstChild;
-
-    // Check if the child element exists before attempting to remove it
-    if (childToDelete) {
-        // Remove the child element
-        milesContainer.removeChild(childToDelete);
-    }
-
-    const firstExistingChild = milesContainer.firstChild;
-
-    milesContainer.insertBefore(movingCarContainer, firstExistingChild);
-    
-    content.appendChild(
-        milesContainer,
-      );
-
+    transition.innerHTML += "What does " + Co2.val + " kilograms of CO2 savings look like?"
+      
+    // desktop computer
+    if (window.screen.width >= 768) {
       content.appendChild(
-        createThreeStatsRowContainer(
-          gallonsOfGas,
-          smartPhonesCharged,
-          smartPhonesCharged,
-          gogDesc,
-          trDesc,
-          spDesc,
-          carIconSrc,
-          phoneIconSrc,
-          phoneIMAGE,
-          "30px",
-          "18px",
-          "18px",
+        createCO2StatsticContainer(
+          Co2,
+          statistics,
           "4/5",
           "1/2",
         ),
       );
-
-    // desktop computer
-    if (window.screen.width >= 768) {
-      // content.appendChild(
-      //   createTwoStatsRowContainer(
-      //     milesDriven,
-      //     smartPhonesCharged,
-      //     mdDesc,
-      //     spDesc,
-      //     carIconSrc,
-      //     phoneIconSrc,
-      //     "30px",
-      //     "18px",
-      //     "4/5",
-      //     "1/2",
-      //   ),
-      // );
-
-      // content.appendChild(
-      //   createTwoStatsRowContainer(
-      //     gallonsOfGas,
-      //     treeSeedlingsGrown,
-      //     gogDesc,
-      //     tsgDesc,
-      //     gasIconSrc,
-      //     treeIconSrc,
-      //     "18px",
-      //     "17px",
-      //     "4/5",
-      //     "1/2",
-      //   ),
-      // );
+  
+      content.appendChild(transition);
+      
+      content.appendChild(
+        milesContainer(
+          milesDriven,
+          "4/5",
+          "1/2",
+        ),
+        );
+  
+        content.appendChild(
+          createThreeStatsRowContainer(
+            gallonsOfGas,
+            trashBagSaved,
+            smartPhonesCharged,
+            "4/5",
+            "1/2",
+          ),
+        );
     } // mobile
     else {
       content.appendChild(
-        createStatsContainerElement(
-          milesDriven,
-          mdDesc,
-          carIconSrc,
-          "25px",
+        createCO2Element(
+          Co2,
           "4/5",
           "1/2",
-        ),
+        )
       );
+      
       content.appendChild(
-        createStatsContainerElement(
-          smartPhonesCharged,
-          spDesc,
-          phoneIconSrc,
-          "25px",
-          "4/5",
-          "1/2",
-        ),
+        createStatisticsDescription(
+          statistics
+        )
       );
+      
+
+      var milesCon = milesContainer(
+        milesDriven,
+        "4/5",
+        "1/2",
+      );
+
+      var movingCarElement = milesCon.querySelector(".movingCar");
+      var movingCarContainer = milesCon.querySelector(".mx-3");
+
+      // Check if the movingCar element exists before attempting to add the class
+      if (movingCarElement) {
+          // Add the class "movingCarMobile" to the movingCar element
+          movingCarElement.classList.add("movingCarMobile");
+          movingCarContainer.classList.remove("mx-3");
+      }
+
+      
+      content.appendChild(
+        milesCon
+        );
+
       content.appendChild(
         createStatsContainerElement(
           gallonsOfGas,
-          gogDesc,
-          gasIconSrc,
-          "25px",
           "4/5",
           "1/2",
         ),
       );
-      content.appendChild(
-        createStatsContainerElement(
-          treeSeedlingsGrown,
-          tsgDesc,
-          treeIconSrc,
-          "25px",
-          "4/5",
-          "1/2",
-        ),
+
+      var trashContainer = createStatsContainerElement(trashBagSaved); 
+    
+      var icon = document.createElement("img");
+      icon.classList.add(
+        "w-3/4",
+        "mb-3",
+        "mx-auto"
       );
+      icon.src = trashIMAGE;
+      icon.alt = "icon";
+
+      trashContainer.insertBefore(icon, trashContainer.firstChild);
+
+      content.appendChild(trashContainer);
+
+      var phoneContainer = createStatsContainerElement(smartPhonesCharged);
+      phoneContainer.insertBefore(batteryContainer(), phoneContainer.firstChild);
+
+      content.appendChild(phoneContainer);
     }
   }
+
+  //Code to make pop-up window work
   const openModalButtons = document.querySelectorAll('[data-modal-target]');
   const closeModalButtons = document.querySelectorAll('[data-close-button]');
   const overlay = document.getElementById('overlay');
@@ -268,23 +221,24 @@ function handleFormSubmission() {
   openModalButtons.forEach(button => {
     button.addEventListener('click', () => {
       const modal = document.querySelector(button.dataset.modalTarget)
-      openModal(modal)
+      openModal(modal, overlay)
     })
   });
 
   overlay.addEventListener('click', () => {
     const modals = document.querySelectorAll('.modal.active')
     modals.forEach(modal => {
-      closeModal(modal)
+      closeModal(modal,overlay)
     })
   });
 
   closeModalButtons.forEach(button => {
     button.addEventListener('click', () => {
       const modal = button.closest('.modal')
-      closeModal(modal)
+      closeModal(modal,overlay)
     })
   });
+
 }
 
 function formValidation() {
@@ -321,51 +275,59 @@ function formValidation() {
 }
 
 function createCharts(
-  totalFoodCompost,
-  totalYardCompost,
+  pieChartLabels,
+  pieChartData,
   histogramLabels,
   histogramData,
-  histogramStep,
   totalCO2Saved,
-  averageCompostPerUser,
+  totalCombinedCompost,
 ) {
   // Reformat data.
   if (totalCO2Saved > 1000) {
     totalCO2Saved = (totalCO2Saved / 1000).toFixed(2) + "K";
   } else totalCO2Saved = totalCO2Saved.toFixed(2);
-  document.getElementById("pie-chart").ariaLabel =
-    "Pie chart showing the amount of food waste composted compared to yard waste composted in gallons, where the total food waste composted was " +
-    totalFoodCompost +
-    " gallons and the total yard waste composted was " +
-    totalYardCompost +
-    " gallons.";
 
-  document.getElementById("bar-chart").ariaLabel =
-    "Histogram showing ranges of total food waste composted versus percentage of users who composted within that range, where the first range was between ";
-  for (let i = 0; i < histogramLabels.length; i++) {
-    document.getElementById("bar-chart").ariaLabel +=
-      histogramLabels[i] -
-      histogramStep / 2 +
-      " and " +
-      (histogramLabels[i] + histogramStep / 2) +
-      " gallons, and the percentage of users who composted within that range was " +
-      histogramData[i] +
-      " percent, " +
-      " the next range was between ";
+  //creating aria labels for the graphs
+  let yardAria = "";
+  for(let i = 0; i < pieChartLabels.length; i++){
+    yardAria += pieChartData[i] + " entries of " + pieChartLabels[i]+ " gallons, ";
   }
 
+  yardAria = yardAria.slice(0, -2);
+
+  yardAria += ".";
+
+  let foodAria = "";
+  for(let i = 0; i < pieChartLabels.length; i++){
+    foodAria += histogramData[i] + " entries of " + histogramLabels[i]+ " gallons, ";
+  }
+
+  foodAria = foodAria.slice(0, -2);
+
+  foodAria += ".";
+
+
+  document.getElementById("pie-chart").ariaLabel =
+    "Pie chart showing the amount of yard waste composted in gallons, where there are " + yardAria;
+    
+    console.log(document.getElementById("pie-chart").ariaLabel);
+  document.getElementById("bar-chart").ariaLabel =
+    "Histogram showing ranges of total food waste composted where there is " + foodAria;
+    console.log(document.getElementById("bar-chart").ariaLabel);
+
+  //Creating Pie Chart
   const pieChartElement = document.getElementById("pie-chart").getContext("2d");
   new Chart(pieChartElement, {
     type: "pie",
     data: {
-      labels: ["Food Waste (gallons)", "Yard Waste (gallons)"],
+      labels: ["10 Gallons", "20 Gallons", "32 Gallons", "63 Gallons"],
       datasets: [
         {
-          labels: [],
-          data: [totalFoodCompost, totalYardCompost],
+          labels: pieChartLabels.map(String),
+          data: pieChartData,
           borderWidth: 2,
           borderColor: "#b8b8b8",
-          backgroundColor: ["#fdbd10", "#3aa8e4"],
+          backgroundColor: ["#fdbd10", "#3aa8e4", "#EF7B45", "#D84727"],
         },
       ],
     },
@@ -373,7 +335,7 @@ function createCharts(
       plugins: {
         title: {
           display: true,
-          text: "Total Food Waste vs Total Yard Waste",
+          text: "Yard Waste Compost Distribution",
         },
       },
       responsive: true,
@@ -382,42 +344,39 @@ function createCharts(
     },
   });
 
-  let mappedHistogramData = histogramData.map((k, i) => ({
-    x: histogramLabels[i],
-    y: k,
-  }));
+  //Creating Bar Chart
+  const ctx = document.getElementById('bar-chart').getContext('2d');
 
-  const histogram = document.getElementById("bar-chart").getContext("2d");
-  new Chart(histogram, {
-    type: "bar",
+  // Create the bar chart
+  new Chart(ctx, {
+    type: 'bar',
     data: {
-      datasets: [
-        {
-          label: "Percentage of Users",
-          data: mappedHistogramData,
-          backgroundColor: "#3aa8e4",
-          borderColor: "#0371ad",
-          borderWidth: 1,
-          barPercentage: 1,
-          categoryPercentage: 1,
-          borderRadius: 5,
-        },
-      ],
+        labels: histogramLabels.map(String), // Convert numbers to strings for labels
+        datasets: [{
+        data: histogramData, // Your actual y-axis values go here
+        backgroundColor: '#3aa8e4',
+        borderColor: '#0371ad',
+        borderWidth: 1,
+        borderRadius: 5,
+      }]
     },
     options: {
+      plugins: {
+        title: {
+          display: true,
+          text: "Food Waste Distribution",
+        },
+        legend:{
+          display: false
+        }
+      },
       scales: {
         x: {
-          type: "linear",
+          type: 'linear',
           offset: false,
-          grid: {
-            offset: false,
-          },
-          ticks: {
-            stepSize: histogramStep,
-          },
           title: {
             display: true,
-            text: "Weekly Compost (gallons)",
+            text: 'Food Waste Composting Value (Gallons)',
             font: {
               size: 14,
             },
@@ -425,45 +384,13 @@ function createCharts(
         },
         y: {
           beginAtZero: true,
-          title: {
-            display: true,
-            text: "Percentage of Users",
-            font: {
-              size: 14,
-            },
-          },
         },
       },
       responsive: true,
-      aspectRatio:
-        window.innerWidth <= 900 ? (window.innerWidth < 530 ? 0.8 : 1) : 1.9, // Adjust the aspect ratio for mobile/tablet/desktop
-      maintainAspectRatio: true,
-      plugins: {
-        legend: {
-          display: false,
-        },
-        title: {
-          display: true,
-          text: "Weekly Compost Per User Distribution",
-        },
-
-        tooltip: {
-          callbacks: {
-            title: (items) => {
-              if (!items.length) {
-                return "";
-              }
-              const item = items[0];
-              const x = item.parsed.x;
-              const min = x - histogramStep / 2;
-              const max = x + histogramStep / 2;
-              return `Weekly Compost: ${min} - ${max} gallons`;
-            },
-          },
-        },
-      },
-    },
+      maintainAspectRatio: false,
+    }
   });
+
   const stats = document.getElementById("statistics-container");
   let bigStatsContainer = document.createElement("div");
 
@@ -496,12 +423,12 @@ function createCharts(
                 <dt
                   class="order-2 mt-2 text-lg font-medium leading-6 text-gray-700"
                 >
-                average gallons compost per survey respondent 
+                total gallons of food and yard waste composted
                 </dt>
                 <dd
                   class="order-1 text-5xl font-extrabold leading-none text-anr-off-blue"
                 >
-                ${averageCompostPerUser}
+                ${totalCombinedCompost}
                 </dd>
               </div>
               
@@ -514,44 +441,14 @@ function createCharts(
   stats.after(bigStatsContainer);
 }
 
-// function createInfoContainerElement(
-//   description,
-//   mobileWidth = "4/5",
-//   desktopWidth = "3/12",
-// ) {
-//   var display = document.createElement("div");
-//   display.innerHTML = description;
-//   display.classList.add(
-//     "bg-green-100",
-//     "border-l-4",
-//     "border-green-500",
-//     "text-green-700",
-//     "rounded",
-//     "p-4",
-//     "mt-4",
-//     `md:w-${desktopWidth}`,
-//     `w-${mobileWidth}`,
-//     "mx-auto",
-//   );
-
-//   var info = document.createElement("p");
-//   info.classList.add("font-bold", "text-center");
-//   display.appendChild(info);
-
-//   return display;
-// }
-
 function createStatsContainerElement(
-  statistic,
-  description,
-  iconSrc,
-  iconSize = "30px",
+  obj,
   width = "4/5",
   desktopWidth = "3/12",
 ) {
   // Rewrite statistic with a K if over 1000
-  if (statistic > 1000) {
-    statistic = (statistic / 1000).toFixed(2) + "K";
+  if (obj.val > 1000) {
+    obj.val = (obj.val / 1000).toFixed(2) + "K";
   }
 
   var container = document.createElement("div");
@@ -579,7 +476,7 @@ function createStatsContainerElement(
     "max-w-full",
     "text-center"
   );
-  stat.innerHTML = statistic;
+  stat.innerHTML = obj.val;
 
   var desc = document.createElement("p");
   desc.classList.add(
@@ -591,57 +488,49 @@ function createStatsContainerElement(
     "text-center"
   );
 
-  // var icon = document.createElement("img");
-  // icon.classList.add("inline");
-  // icon.src = iconSrc;
-  // icon.style.height = iconSize;
-  // icon.alt = "icon";
-
-  // desc.appendChild(icon);
-  desc.innerHTML += description;
+  desc.innerHTML += obj.desc;
 
   container.appendChild(stat);
   container.appendChild(desc);
-  let desc3 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae congue eu consequat ac felis donec et odio. Nunc consequat interdum varius sit amet mattis vulputate enim nulla. Quam elementum pulvinar etiam non quam. Pretium viverra suspendisse potenti nullam ac. Vitae congue eu consequat ac felis. Commodo elit at imperdiet dui accumsan sit amet nulla. Ultricies integer quis auctor elit sed vulputate mi sit. Venenatis a condimentum vitae sapien pellentesque habitant. Eget gravida cum sociis natoque penatibus et magnis. Volutpat consequat mauris nunc congue nisi vitae suscipit. Arcu cursus vitae congue mauris rhoncus aenean. Urna nec tincidunt praesent semper feugiat nibh sed pulvinar proin. Hendrerit dolor magna eget est lorem ipsum. Mattis nunc sed blandit libero volutpat sed cras ornare arcu. Non nisi est sit amet facilisis. In hendrerit gravida rutrum quisque non tellus. Pellentesque eu tincidunt tortor aliquam nulla. Pellentesque eu tincidunt tortor aliquam nulla facilisi cras.";
   container.appendChild(
-    popup("test", desc3),
+    popup(obj.title, obj.popUpDesc, obj.modalID),
   );
 
   return container;
 }
 
-function createTwoStatsRowContainer(
-  stat1,
-  stat2,
-  desc1,
-  desc2,
-  icon1,
-  icon2,
-  icon1Sz = "30px",
-  icon2Sz = "30px",
-  mobileWidth = "4/5",
-  desktopWidth = "3/12",
-) {
-  var container = document.createElement("div");
-  container.classList.add(
-    "flex",
-    `w-${mobileWidth}`,
-    `md:w-${desktopWidth}`,
-    "mx-auto",
-  );
+// function createTwoStatsRowContainer(
+//   stat1,
+//   stat2,
+//   desc1,
+//   desc2,
+//   // icon1,
+//   // icon2,
+//   // icon1Sz = "30px",
+//   // icon2Sz = "30px",
+//   mobileWidth = "4/5",
+//   desktopWidth = "3/12",
+// ) {
+//   var container = document.createElement("div");
+//   container.classList.add(
+//     "flex",
+//     `w-${mobileWidth}`,
+//     `md:w-${desktopWidth}`,
+//     "mx-auto",
+//   );
 
-  var statCont1 = createStatsContainerElement(stat1, desc1, icon1, icon1Sz);
-  statCont1.classList.remove("md:w-3/12");
-  statCont1.classList.add("mr-1", "md:w-1/2");
-  var statCont2 = createStatsContainerElement(stat2, desc2, icon2, icon2Sz);
-  statCont2.classList.remove("md:w-3/12");
-  statCont2.classList.add("ml-1", "md:w-1/2");
+//   var statCont1 = createStatsContainerElement(stat1, desc1); //, icon1, icon1Sz
+//   statCont1.classList.remove("md:w-3/12");
+//   statCont1.classList.add("mr-1", "md:w-1/2");
+//   var statCont2 = createStatsContainerElement(stat2, desc2); //, icon2, icon2Sz
+//   statCont2.classList.remove("md:w-3/12");
+//   statCont2.classList.add("ml-1", "md:w-1/2");
 
-  container.appendChild(statCont1);
-  container.appendChild(statCont2);
+//   container.appendChild(statCont1);
+//   container.appendChild(statCont2);
 
-  return container;
-}
+//   return container;
+// }
 
 function convertToKgCO2(input, unit) {
   if (unit == "kilograms") {
@@ -680,6 +569,10 @@ function convertToTreeSeedlingsGrown(MetricTonsOfCo2) {
 
 function convertToAcresOfForest(MetricTonsOfCo2) {
   return MetricTonsOfCo2 / 0.84;
+}
+
+function convertToTrashBags(MetricTonsOfCo2){
+  return MetricTonsOfCo2/0.023
 }
 
 function percentile(arr, value) {
@@ -723,8 +616,10 @@ function initClient() {
 }
 
 function loadSheets() {
-  const spreadsheetId = "1QKrr4FgZQi-TJFIzq1uSpM4lPKgcVWxCohREJAllrD8";
+  // const spreadsheetId = "1QKrr4FgZQi-TJFIzq1uSpM4lPKgcVWxCohREJAllrD8";
+  const spreadsheetId = "1Hf_BtKrpwQlFGfikgL9_53nSsnIUQn0CVcYxPSmoRbI";
   const sheetName = "QuialtrixRawData";
+  // const sheetName = "QuialtrixData";
 
   gapi.client.sheets.spreadsheets.values
     .get({
@@ -734,103 +629,66 @@ function loadSheets() {
     .then(
       function (response) {
         const values = response.result.values;
-        totalFoodCompost = values[1][3];
-        totalYardCompost = values[1][4];
+        let length = values.length-1;
 
-        // Used for calculating percentiles.
-        allFoodWasteComposted = values
-          .slice(1)
-          .map((row) => parseFloat(row[1]));
+        //Food Waste Data
 
-        allYardWasteComposted = values
-          .slice(1)
-          .map((row) => parseFloat(row[2]));
+        foodWasteValues = [0.25, 0.5, 1, 2, 3, 4];
+        foodWasteCount = [];
 
-        // For the total, total[i] = allFoodWasteComposted[i] + allYardWasteComposted[i]
-        allWasteComposted = allFoodWasteComposted.map(
-          (value, index) => value + allYardWasteComposted[index],
-        );
+        totalFoodCompost = 0;
+        let j = 0;
+        let totalUser = 0;
+        for(let i = 1; i <= 6; i++){
+          foodWasteCount.push(values[length][i]);
+          totalFoodCompost += foodWasteValues[j]*foodWasteCount[j];
+          totalUser += Number(foodWasteCount[j]);
+          j++;
+        }    
+
+        yardWasteValues = [10, 20, 32, 63];
+        yardWasteCount = [];
+
+        totalYardCompost = 0;
+        j = 0;
+        for(let i = 7; i <= 10; i++){
+          yardWasteCount.push(values[length][i]);
+          totalYardCompost += yardWasteValues[j]*yardWasteCount[j];
+          totalUser += Number(yardWasteCount[j]);
+          j++;
+        }
+
+        totalCombinedCompost = totalFoodCompost + totalYardCompost;
+
+        avgCombinedCompost = (totalCombinedCompost/totalUser).toFixed(2);
+
 
         localStorage.setItem(
           "allWasteComposted",
-          JSON.stringify(allWasteComposted),
+          JSON.stringify(totalCombinedCompost),
         );
         localStorage.setItem(
           "allFoodWasteComposted",
-          JSON.stringify(allFoodWasteComposted),
+          JSON.stringify(totalFoodCompost),
         );
         localStorage.setItem(
           "allYardWasteComposted",
-          JSON.stringify(allYardWasteComposted),
+          JSON.stringify(totalYardCompost),
         );
 
-        let maxTotalCompost = 0;
-        let averageTotalCompostPerUser = 0;
-        let totalUsers = 0;
-        for (var i = 1; i < values.length; i++) {
-          if (
-            !values[i][1] ||
-            !values[i][2] ||
-            values[i][1].trim() == "" ||
-            values[i][2].trim() == ""
-          )
-            continue;
-          totalUsers++;
-          averageTotalCompostPerUser += parseFloat(values[i][1]);
-          averageTotalCompostPerUser += parseFloat(values[i][2]);
-          if (
-            maxTotalCompost <
-            parseFloat(values[i][1]) + parseFloat(values[i][2])
-          ) {
-            maxTotalCompost =
-              parseFloat(values[i][1]) + parseFloat(values[i][2]);
-          }
-        }
-        // Round maxTotalCompost to nearest integer divisible by 8.
-        maxTotalCompost = Math.ceil(maxTotalCompost / 8) * 8;
-        // Create labels for a histogram, starting at 0, ending at maxTotalCompost, with 8 bins.
-        let histogramLabels = [];
-        for (
-          var i = maxTotalCompost / 8;
-          i <= maxTotalCompost;
-          i += maxTotalCompost / 8
-        ) {
-          histogramLabels.push(i - maxTotalCompost / 16);
-        }
-
-        let histogramStep = maxTotalCompost / 8;
-        // Create data for the histogram: the percentage of users who composted between each bin.
-        let histogramData = [];
-        for (var i = 0; i < histogramLabels.length; i++) {
-          histogramData.push(
-            (
-              percentile(
-                allWasteComposted,
-                histogramLabels[i] + histogramStep / 2,
-              ) -
-              percentile(
-                allWasteComposted,
-                histogramLabels[i] - histogramStep / 2,
-              )
-            ).toFixed(2),
-          );
-        }
 
         let totalCO2Saved = convertToKgCO2(
-          averageTotalCompostPerUser,
+          totalCombinedCompost,
           "gallons",
         );
-        averageTotalCompostPerUser = (
-          averageTotalCompostPerUser / totalUsers
-        ).toFixed(2);
+        
         createCharts(
-          totalFoodCompost,
-          totalYardCompost,
-          histogramLabels,
-          histogramData,
-          histogramStep,
+          yardWasteValues,
+          yardWasteCount,
+          foodWasteValues,
+          foodWasteCount,
           totalCO2Saved,
-          averageTotalCompostPerUser,
+          totalCombinedCompost
         );
       },
       function (response) {
@@ -843,8 +701,8 @@ function loadSheets() {
 }
 
 function createCO2StatsticContainer(
-  stat1, //co2
-  stat2, //percentile
+  obj1,
+  obj2,
   mobileWidth = "4/5",
   desktopWidth = "3/12",
 ) {
@@ -856,13 +714,10 @@ function createCO2StatsticContainer(
     "mx-auto",
   );
 
-  let desc1 = "Your CO2 savings:";
-  let desc2 = "You are in the " + stat2 +" percentile. According to our data, the average composter in Santa Clara County is "
-  + "blah blah blah. This is a combination of blah blah blah pounds in yard waste, blah blha blah pounds in food waste."
-  var statCont1 = createCO2Element(stat1, desc1);
+  var statCont1 = createCO2Element(obj1);
   statCont1.classList.remove("md:w-3/12","w-4/5"); 
   statCont1.classList.add("mr-1","md:w-1/8", "w-1/3");
-  var statCont2 = createStatisticsDescription(stat2, desc2);
+  var statCont2 = createStatisticsDescription(obj2);
   statCont2.classList.remove("md:w-3/12","w-4/5");
   statCont2.classList.add("ml-1","md:w-1/8","max-w-full", "w-2/3");
 
@@ -873,16 +728,13 @@ function createCO2StatsticContainer(
 }
 
 function createCO2Element(
-  statistic,
-  description,
-  // iconSrc,
-  // iconSize = "30px",
+  obj,
   width = "4/5",
   desktopWidth = "3/12",
 ) {
   // Rewrite statistic with a K if over 1000
-  if (statistic > 1000) {
-    statistic = (statistic / 1000).toFixed(2) + "K";
+  if (obj.val > 1000) {
+    obj.val = (obj.val / 1000).toFixed(2) + "K";
   }
 
   var container = document.createElement("div");
@@ -910,7 +762,7 @@ function createCO2Element(
     "max-w-full",
     "text-center"
   );
-  stat.innerHTML = statistic + " kg";
+  stat.innerHTML = obj.val + " kg";
 
   var desc = document.createElement("p"); //your co2 saving
   desc.classList.add(
@@ -922,22 +774,18 @@ function createCO2Element(
     "text-center"
   );
 
-  desc.innerHTML += description;
+  desc.innerHTML += obj.desc;
   container.appendChild(desc);
   container.appendChild(stat);
-  let desc3 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae congue eu consequat ac felis donec et odio. Nunc consequat interdum varius sit amet mattis vulputate enim nulla. Quam elementum pulvinar etiam non quam. Pretium viverra suspendisse potenti nullam ac. Vitae congue eu consequat ac felis. Commodo elit at imperdiet dui accumsan sit amet nulla. Ultricies integer quis auctor elit sed vulputate mi sit. Venenatis a condimentum vitae sapien pellentesque habitant. Eget gravida cum sociis natoque penatibus et magnis. Volutpat consequat mauris nunc congue nisi vitae suscipit. Arcu cursus vitae congue mauris rhoncus aenean. Urna nec tincidunt praesent semper feugiat nibh sed pulvinar proin. Hendrerit dolor magna eget est lorem ipsum. Mattis nunc sed blandit libero volutpat sed cras ornare arcu. Non nisi est sit amet facilisis. In hendrerit gravida rutrum quisque non tellus. Pellentesque eu tincidunt tortor aliquam nulla. Pellentesque eu tincidunt tortor aliquam nulla facilisi cras.";
   container.appendChild(
-    popup("test", desc3),
+    popup(obj.title, obj.popUpDesc, obj.modalID),
   );
   
   return container;
 }
 
 function createStatisticsDescription(
-  statistic, //percentile stat
-  description,
-  // iconSrc,
-  // iconSize = "30px",
+  obj,
   width = "4/5",
   desktopWidth = "3/12",
 ){
@@ -958,49 +806,35 @@ function createStatisticsDescription(
   header.classList.add(
     "font-heading",
     "mb-2",
-    "text-3xl",
-    "md:text-4xl",
+    "text-xl",
     "font-bold",
     "text-anr-off-blue",
     "font-black",
     "text-center"
   );
-  header.innerHTML += "Statistics";
+  header.innerHTML += "Composting Education Program's Database";
 
   var desc = document.createElement("p");
   desc.classList.add(
     "font-heading",
     "mb-2",
-    "text-lg",
+    "text-sml",
     "text-gray-700",
     "font-bold",
     "text-center"
   );
 
-  desc.innerHTML += description;
+  desc.innerHTML += obj.desc;
   
   container.appendChild(header);
   container.appendChild(desc);
-  let desc3 = "bfskf sof psodf sdoiwpe  foipoid  e w  fs dofispfi spps fisofis fpsoifposfod fodfispdgurn gnkdjf v poisd f uiwnf  s efdfjsfj sf s g dfeufi d";
-  var popUp = popup("text", desc3);
-  container.appendChild(popUp);
-
   return container;
 }
 
 function createThreeStatsRowContainer(
-  stat1,
-  stat2,
-  stat3,
-  desc1,
-  desc2,
-  desc3,
-  icon1,
-  icon2,
-  icon3,
-  icon1Sz = "30px",
-  icon2Sz = "30px",
-  icon3Sz = "30px",
+  obj1,
+  obj2,
+  obj3,
   mobileWidth = "4/5",
   desktopWidth = "3/12",
 ) {
@@ -1012,24 +846,16 @@ function createThreeStatsRowContainer(
       "mx-auto",
     );
 
-    var statCont1 = createVerticleContainer(stat1, stat2, desc1, desc2, icon1, icon2, icon1Sz, icon2Sz);
+    var statCont1 = createVerticleContainer(obj1, obj2);
     statCont1.classList.remove("md:w-3/12");
     statCont1.classList.add("mr-1", "md:w-1/2");
-    var statCont2 = createStatsContainerElement(stat3, desc3, icon3, icon3Sz);
+    var statCont2 = createStatsContainerElement(obj3);
     statCont2.classList.remove("md:w-3/12");
     statCont2.classList.add("ml-1", "md:w-1/2");
     statCont2.children[1].classList.remove("text-base");
     statCont2.children[1].classList.add("text-xl");
 
-    var icon = document.createElement("img");
-    icon.classList.add(
-      "w-full",
-      "mb-3"
-    );
-    icon.src = icon3;
-    icon.alt = "icon";
-
-    statCont2.insertBefore(icon, statCont2.firstChild);
+    statCont2.insertBefore(batteryContainer(), statCont2.firstChild);
 
     container.appendChild(statCont1);
     container.appendChild(statCont2)
@@ -1038,14 +864,8 @@ function createThreeStatsRowContainer(
 }
 
 function createVerticleContainer(
-  stat1,
-  stat2,
-  desc1,
-  desc2,
-  icon1,
-  icon2,
-  icon1Sz = "30px",
-  icon2Sz = "30px",
+  obj1,
+  obj2,
   mobileWidth = "4/5",
   desktopWidth = "3/12",
 ) {
@@ -1058,10 +878,10 @@ function createVerticleContainer(
       "flex-col"
     );
 
-    var statCont1 = createStatsContainerElement(stat1, desc1, icon1, icon1Sz);
+    var statCont1 = createStatsContainerElement(obj1); 
     statCont1.classList.remove("md:w-3/12", "mx-auto");
     statCont1.classList.add("w-full","h-equal");
-    var statCont2 = createStatsContainerElement(stat2, desc2, icon2, icon2Sz);
+    var statCont2 = createStatsContainerElement(obj2);
     statCont2.classList.remove("md:w-3/12","mx-auto");
     statCont2.classList.add("w-full", "h-equal");
     
@@ -1082,21 +902,65 @@ function createVerticleContainer(
     return container;
 }
 
+function milesContainer(
+  obj,
+  width = "4/5",
+  desktopWidth = "3/12",
+){
+  var container = createStatsContainerElement(
+    obj,
+    width,
+    desktopWidth,
+  );
+
+  container.children[1].classList.remove("text-base"); 
+  container.children[1].classList.add("text-lg");
+
+  var movingCarContainer = document.createElement("div");
+  movingCarContainer.classList.add(
+    "mx-3",
+  );
+
+  var icon = document.createElement("img");
+  icon.classList.add(
+    "movingCar",
+  );
+  icon.src = movingCar;
+  icon.alt = "icon";
+
+  movingCarContainer.appendChild(icon);
+
+  const childToDelete = container.firstChild;
+
+  // Check if the child element exists before attempting to remove it
+  if (childToDelete) {
+      // Remove the child element
+      container.removeChild(childToDelete);
+  }
+
+  const firstExistingChild = container.firstChild;
+
+  container.insertBefore(movingCarContainer, firstExistingChild);
+
+  return container;
+}
+
 function popup(
   title,
-  desc
+  desc,
+  modalId = "modal"
 ){
   var container = document.createElement("div"); //contains modal and overlay
   container.classList.add("text-center");
 
   var moreInfo = document.createElement("button");
-  moreInfo.setAttribute("data-modal-target", "#modal");
+  moreInfo.setAttribute("data-modal-target",`#${modalId}`);
   moreInfo.classList.add('text-base', 'font-bold');
   moreInfo.innerHTML = "Learn More";
   container.append(moreInfo);
 
   var modal = document.createElement("div");
-  modal.setAttribute("id", "modal");
+  modal.setAttribute("id", modalId);
   modal.classList.add(
     "modal",
   );
@@ -1127,10 +991,6 @@ function popup(
 
   var overlay = document.createElement("div");
   overlay.setAttribute("id", "overlay");
-  
-  // overlay.classList.add(
-  //   'overlay',
-  // )
 
   modalHeader.appendChild(modalTitle);
   modalHeader.appendChild(closeButton);
@@ -1143,14 +1003,38 @@ function popup(
   return container;
 }
 
-function openModal(modal) {
+function openModal(modal, overlay) {
   if (modal == null) return;
   modal.classList.add('active');
   overlay.classList.add('active');
 }
 
-function closeModal(modal) {
+function closeModal(modal, overlay) {
   if (modal == null) return;
   modal.classList.remove('active');
   overlay.classList.remove('active');
+}
+
+function batteryContainer(){
+  var container = document.createElement("div");
+  container.classList.add("mySlides", "m-auto");
+
+  var image = document.createElement("img");
+  image.setAttribute("id", "image");
+
+  container.appendChild(image);
+
+  var battery = ["../images/EmptyBattery.png", "../images/1:4Charged.png", "../images/1:2Charged.png","../images/3:4Charged.png","../images/FullCharge.png"];
+  let i = 0;
+  setInterval(function(){
+    image.src = battery[i];
+    i++;
+    if(i > 4){ i = 0;}
+  },800);
+
+  return container;
+}
+
+function calculateNormalDistribution(x, mean, stdDeviation) {
+  return (1 / (stdDeviation * Math.sqrt(2 * Math.PI))) * Math.exp(-((x - mean) ** 2) / (2 * stdDeviation ** 2));
 }
