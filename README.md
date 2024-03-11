@@ -1,6 +1,7 @@
 # Composting Statistics Calculator
+By Meagan Vu, Ron Zhao, Maya Buchanan, and Ahnika Mangalick
 
-By Stevie Dean, Emily Hawkins, Peter Lattimer, and Nicolas Lopatin
+Previously worked on by: Stevie Dean, Emily Hawkins, Peter Lattimer, and Nicolas Lopatin
 
 ## Overview
 
@@ -9,6 +10,7 @@ This calculator is a web application designed to help individuals track and calc
 ## Features
 
 - **CO2 Saved Calculator:** Users can input the weight of their composted materials, such as food scraps, yard waste, and organic matter, and we will output how much CO2 they saved as a result.
+- **How to Track Accurately:** Users can come to this page to learn more information about how/why to compost
 
 ## How to Use
 
@@ -16,7 +18,7 @@ This calculator is a web application designed to help individuals track and calc
 
 ## Technologies Used
 
-- Front-end: HTML, Tailwind CSS
+- Front-end: HTML, Tailwind CSS, JavaScript 
 - Back-end: TBD
 - Database: MongoDB (?)
 - Charting Library: Chart.js (?)
