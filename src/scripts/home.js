@@ -1,6 +1,6 @@
 // Icon links
 var trashIMAGE = "../images/trashcanHolder.png";
-var movingCar = "../images/movingcar.png";
+var movingCar = "../images/movingcar.PNG";
 var battery = ["../images/EmptyBattery.png", "../images/1:4Charged.png", "../images/1:2Charged.png","../images/3:4Charged.png","../images/FullCharge.png"];
 
 
