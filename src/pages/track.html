@@ -57,6 +57,8 @@
       "Segoe UI Symbol", "Noto Color Emoji";
     }
 
+
+
     section {
       background-color: #ebe7e7;
       padding: 20px;
@@ -73,7 +75,7 @@
     }
 
     .left-side,
-  .right-side {
+.right-side {
     color: #000000;
     padding: 20px;
     border-radius: 10px;
@@ -83,13 +85,21 @@
     border: 1px solid #000;
     margin: 20px 0; /* Adjust the margin for spacing */
     width: calc(50% - 1px); /* Adjust the width by accounting for the border */
-  }
+    text-align: center;
+
+}
 
     .left-side {
     width: calc(50% - 2px); /* Adjust the width by accounting for the border */
     border-right-width: 0;
     box-sizing: border-box; /* Include border and padding in the width calculation */
     }
+
+    .right-side {
+        text-align: center;
+        box-sizing: border-box;
+    }
+
 
 
     @media only screen and (max-width: 800px) {
@@ -110,13 +120,15 @@
     }
 
     p {
-      text-align: center;
+      text-align: justify;
       line-height: 1.5;
       font-size: 22px;
       padding: 5px;
+      max-width: 75%;
       font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, 
       "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", 
       "Segoe UI Symbol", "Noto Color Emoji";
+      margin: 0 auto;
     }
 
     .image-container {
@@ -139,12 +151,15 @@
     }
 
     .image-container2 img {
-      max-width: 50%;
+      max-width: 40%;
       height: auto;
       display: inline-block;
       margin: 0;
+      padding-top: 60px;
       border-radius: 10px;
     }
+
+  
   </style>
 
 </head>
@@ -177,7 +192,7 @@
       </p>
 
       <div class="image-container"> 
-        <img src="dirt.png" alt="dirt">
+        <img src="../images/dirt.png" alt="dirt">
         <h5> <i>Sapling tree. Public Domain. CC0 1.0 Universal (CC0 1.0) Public Domain Dedication. </i> </h5>
       </div>
 
@@ -189,8 +204,8 @@
       <p> The average Santa Clara resident produces 4.4 lbs of waste a week. And the organic waste bin provided by the state 
         can hold 20 gallons (two large trash bags) which means as single resident it should be around 1/4 full </p>
         
-        <div class="image-container"> 
-          <img src="greentrash.png" alt="trash">
+        <div class="image-container2"> 
+          <img src="../images/greentrash.png" alt="trash">
           <h5> <i>Trash. Public Domain. CC0 1.0 Universal (CC0 1.0) Public Domain Dedication. </i> </h5>
         </div>
     </div>
@@ -207,7 +222,7 @@
   </p>
 
     <div class="image-container"> 
-      <img src="wall.png" alt="wall">
+      <img src="../images/wall.png" alt="wall">
       <h5> <i>Great Wall png China. Public Domain. CC0 1.0 Universal (CC0 1.0) Public Domain Dedication. </i> </h5>
     </div>
   </div>
@@ -221,7 +236,7 @@
     </p>
   
       <div class="image-container"> 
-        <img src="nofood.png" alt="nofood">
+        <img src="../images/nofood.png" alt="nofood">
         <h5> <i>No food. Public Domain. CC0 1.0 Universal (CC0 1.0) Public Domain Dedication. </i> </h5>
       </div>
     </div>
@@ -246,14 +261,14 @@
 
 
         <div class="right-side"> 
-        <h2> How to use the Calculator </h2>
+        <h2> How to use the <a href="home.html"> Calculator </a>  </h2> 
         <ul>
           <p> Enter amount of waste composted for the WEEK * avg per person is around half a trash bag</p>
           <p> Click Learn More for more information</p>
         </ul>
 
         <div class="image-container"> 
-          <img src="calc.png" alt="calc">
+          <img src="../images/calc.png" alt="calc">
           <h5> <i>Calculator. Public Domain. CC0 1.0 Universal (CC0 1.0) Public Domain Dedication. </i> </h5>
         </div>
       </div>
@@ -270,7 +285,7 @@
         the decomposers thus slowing down all the compost in the landfill</p>
 
         <div class="image-container"> 
-          <img src="hazzard.png" alt="waste">
+          <img src="../images/hazzard.png" alt="waste">
           <h5> <i>Keep out sign. Public Domain. CC0 1.0 Universal (CC0 1.0) Public Domain Dedication. </i> </h5>
         </div>
       </div>
@@ -279,12 +294,13 @@
 
       <div class="right-side">
         <h2> Helpful Links to Learn More about Composting </h2>
-        <ul> </ul><a href="https://cesantaclara.ucanr.edu/Home_Composting_Education/Composting_Workshops/" target="_blank"> Composting Workshops</a> </ul>
-        <ul> </ul><a href="https://cesantaclara.ucanr.edu/Home_Composting_Education/Where_to_Get_Compost/" target="_blank"> Where to get Compost</a> </ul>
-        <ul> <a href="https://cesantaclara.ucanr.edu/Home_Composting_Education/Municipal_Composting_Information/" target=" _blank">Roadside Compost Options </a> </ul>
-        
+        <li> <a href="https://cesantaclara.ucanr.edu/Home_Composting_Education/Composting_Workshops/" target="_blank"> Composting Workshops</a> </li>
+        <li> <a href="https://cesantaclara.ucanr.edu/Home_Composting_Education/Where_to_Get_Compost/" target="_blank"> Where to get Compost</a> </li>
+        <li> <a href="https://cesantaclara.ucanr.edu/Home_Composting_Education/Municipal_Composting_Information/" target=" _blank">Roadside Compost Options </a> </li>
+        <li> <a href="home.html"> Composting Calculator </a></li>
+
          <div class="image-container"> 
-          <img src="world.png" alt="world">
+          <img src="../images/world.png" alt="world">
           <h5> <i>Hand cupping png globe. Public Domain. CC0 1.0 Universal (CC0 1.0) Public Domain Dedication. </i> </h5>
         </div>
 
