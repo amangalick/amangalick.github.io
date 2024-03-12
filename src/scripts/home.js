@@ -48,7 +48,7 @@ function handleFormSubmission() {
     let Co2 = {
       val: convertToKgCO2(input.value, unit.value).toFixed(2),
       desc: "Your CO2 savings:",
-      popUpDesc: "This is the description for the pop up for the CO2",
+      popUpDesc: "A typical person contributes to CO2 emissions through daily activities such as driving, energy consumption, and waste generation, with choices in transportation, household energy use, and consumption habits influencing their carbon footprint. Composting combats CO2 emissions by converting organic waste into nutrient-rich soil, reducing the amount of biodegradable materials sent to landfills, and fostering a circular carbon cycle that sequesters carbon in the soil rather than releasing it into the atmosphere.",
       modalID: "CO2Modal",
       title: "Carbon Dixode Savings",
     };
@@ -58,10 +58,16 @@ function handleFormSubmission() {
     let milesDriven = {
       val: convertToMilesDriven(tonsOfCo2).toFixed(2),
       desc: "You can drive " + convertToMilesDriven(tonsOfCo2).toFixed(2) + " miles <br>or <br>San Jose to San Francisco " + (convertToMilesDriven(tonsOfCo2).toFixed(2)/57.1).toFixed(2) + " times",
-      popUpDesc: "Passenger vehicles include cars, vans, pickups, and SUVs with 2 axles and 4 tires. In 2021, their fuel economy averaged 22.9 mpg, and CO2 accounted for 99.3% of their greenhouse gases (EPA 2023; FHWA 2023). CO2 emissions from gasoline are 8.89 kg per 1,000 gallons. To calculate emissions per mile: divide CO2 per gallon by fuel economy for CO2 per mile, adjusting for methane and nitrous oxide to reflect total greenhouse emissions.",
+      popUpDesc: "Passenger vehicles include cars, vans, pickups, and SUVs with 2 axles and 4 tires. In 2021, their fuel economy averaged 22.9 mpg, and CO2 accounted for 99.3% of their greenhouse gases (EPA 2023; FHWA 2023). CO2 emissions from gasoline are 8.89 kg per 1,000 gallons. To calculate emissions per mile: divide CO2 per gallon by fuel economy for CO2 per mile, adjusting for methane and nitrous oxide to reflect total greenhouse emissions. <br><br>Vehicle icons created by Freepik - Flaticon",
       modalID: "mdModal",
       title: "Miles Driven",
     };
+
+    var milesHyperlinkURL = "https://www.flaticon.com/free-icons/vehicle";
+    milesDriven.popUpDesc = milesDriven.popUpDesc.replace(
+      'Vehicle icons created by Freepik - Flaticon',
+      '<a href="' + milesHyperlinkURL + '" target="_blank" style="text-decoration: underline">Vehicle icons created by Freepik - Flaticon</a>'
+    );
 
     let smartPhonesCharged = {
       val: convertToSmartPhonesCharged(tonsOfCo2).toFixed(2),
@@ -75,10 +81,16 @@ function handleFormSubmission() {
     let trashBagSaved = {
       val: convertToTrashBags(tonsOfCo2).toFixed(3),
       desc: "Trash bags of waste recycled instead of landfilled",
-      popUpDesc: "WARM indicates that recycling mixed materials (like paper, metals, plastics) instead of landfilling them reduces emissions by 2.88 metric tons CO2 equivalent per short ton. The CO2 emissions savings for each trash bag of waste were calculated by applying the per ton savings to the waste quantity in an average trash bag. This quantity was derived by multiplying the mixed recyclables' average density (111 lbs per cubic yard, EPA 2016a) by the volume of a standard 25-gallon trash bag, typically between 20 to 30 gallons (EPA 2016b).",
+      popUpDesc: "WARM indicates that recycling mixed materials (like paper, metals, plastics) instead of landfilling them reduces emissions by 2.88 metric tons CO2 equivalent per short ton. The CO2 emissions savings for each trash bag of waste were calculated by applying the per ton savings to the waste quantity in an average trash bag. This quantity was derived by multiplying the mixed recyclables' average density (111 lbs per cubic yard, EPA 2016a) by the volume of a standard 25-gallon trash bag, typically between 20 to 30 gallons (EPA 2016b). <br><br> Trash Vectors by Vecteezy",
       modalID: "trModal",
       title: "Trash bags Recycled Instead of Landfilled",
     };
+
+    var trashHyperlinkURL = "https://www.vecteezy.com/free-vector/trash";
+    trashBagSaved.popUpDesc = trashBagSaved.popUpDesc.replace(
+      'Trash Vectors by Vecteezy',
+      '<a href="' + trashHyperlinkURL + '" target="_blank" style="text-decoration: underline">Trash Vectors by Vecteezy</a>'
+    );
 
     let gallonsOfGas = {
       val: convertToGasConsumed(tonsOfCo2).toFixed(2),
