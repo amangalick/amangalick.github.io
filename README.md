@@ -19,6 +19,6 @@ This calculator is a web application designed to help individuals track and calc
 ## Technologies Used
 
 - Front-end: HTML, Tailwind CSS, JavaScript 
-- Back-end: TBD
+- Back-end: HTML, Tailwind CSS
 - Database: MongoDB (?)
 - Charting Library: Chart.js (?)
